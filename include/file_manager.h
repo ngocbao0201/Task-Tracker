@@ -12,7 +12,7 @@ private:
 public:
     FileManager(const string& filename = "data\tasks.json");
 
-    vector<Task> loadTasks();
-    bool saveTasks(const vector<Task>& task);
-    int getNextId();
+    vector<Task> loadTasks(); // đọc file Json, trả về danh sách task
+    bool saveTasks(const vector<Task>& task); // lưu danh sách task vào file json
+    int getNextId(); // lấy id mới cho task tiếp theo
 };

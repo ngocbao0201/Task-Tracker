@@ -34,6 +34,6 @@ public:
     void setStatus(TaskStatus status);
 
     //Utility
-    string statusToString() const;
-    string toJsonString() const;
+    string statusToString() const; // chuyển trạng thái từ enum sang string
+    string toJsonString() const; // chuyển string sang json
 };
