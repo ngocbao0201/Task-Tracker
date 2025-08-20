@@ -32,6 +32,8 @@ public:
     //Setters
     void setDescription(const string& desc);
     void setStatus(TaskStatus status);
+    void setCreatedAt(std::time_t timestamp);
+    void setUpdatedAt(std::time_t timestamp);
 
     //Utility
     string statusToString() const; // chuyển trạng thái từ enum sang string
