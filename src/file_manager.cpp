@@ -8,7 +8,8 @@
 using json = nlohmann::json;
 using namespace std;
 
-FileManager::FileManager(const string& filename): filename(filename){}
+FileManager::FileManager(const string& filename): filename(filename) {
+}
 
 vector<Task> FileManager::loadTasks() {
     vector<Task> tasks;
@@ -26,16 +27,18 @@ vector<Task> FileManager::loadTasks() {
                 if (item.contains("id") && item.contains("description")){
                     int id = item["id"];
                     string desc = item["description"];
-                    string status = item.value("status", "To do");
+                    int status = item.value("status", 0);
                     Task task(id, desc);
-                    task.setStatus(Utils::stringToSatutus(status));
+                    task.setStatus(static_cast<TaskStatus>(status));
 
                     if (item.contains("createdAt")){
-                        task.setCreatedAt(item["createdAt"]);
+                        string createdAtStr = item["createdAt"].get<string>();
+                        task.setCreatedAt(stol(createdAtStr)); // Convert string to long
                     }
 
                     if (item.contains("updatedAt")){
-                        task.setUpdatedAt(item["updateAt"]);
+                        string updatedAtStr = item["updatedAt"].get<string>();
+                        task.setUpdatedAt(stol(updatedAtStr)); // Convert string to long
                     }
                     tasks.push_back(task);
                 }
@@ -57,14 +60,15 @@ bool FileManager::saveTasks(const vector<Task>& tasks){
             json taskJson;
             taskJson["id"] = task.getId();
             taskJson["description"] = task.getDescription();
-            taskJson["status"] = task.getStatus();
-            taskJson["createdAt"] = task.getCreatedAt();
-            taskJson["updatedAt"] = task.getUpdatedAt();
+            taskJson["status"] = static_cast<int>(task.getStatus());
+            taskJson["createdAt"] = to_string(task.getCreatedAt()); // Chuyển thành string
+            taskJson["updatedAt"] = to_string(task.getUpdatedAt()); // Chuyển thành string
             j.push_back(taskJson);
         }
 
         ofstream file(filename);
         if (!file.is_open()){
+            cerr << "Could not open file for writing: " << filename << endl;
             return false;
         }
 
